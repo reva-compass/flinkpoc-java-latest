@@ -1,2 +1,5 @@
 # flinkpoc-java-latest
-poc in java with latest version (1.9) of flink
+
+Java poc with latest version (1.9) of flink using blink planner
+
+
