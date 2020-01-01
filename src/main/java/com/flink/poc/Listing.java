@@ -14,8 +14,11 @@ public class Listing {
     private String nbrOfAcres;
     private String coListingMemberUrl;
     private String coListAgentId;
+    private String buyerAgentId;
+    private String coBuyerAgentId;
     private String listOfficeBoardCode;
     private String list207;
+    private Long rowNum;
 
     public Listing() {
 
@@ -118,6 +121,22 @@ public class Listing {
         this.coListAgentId = coListAgentId;
     }
 
+    public String getBuyerAgentId() {
+        return buyerAgentId;
+    }
+
+    public void setBuyerAgentId(String buyerAgentId) {
+        this.buyerAgentId = buyerAgentId;
+    }
+
+    public String getCoBuyerAgentId() {
+        return coBuyerAgentId;
+    }
+
+    public void setCoBuyerAgentId(String coBuyerAgentId) {
+        this.coBuyerAgentId = coBuyerAgentId;
+    }
+
     public String getListOfficeBoardCode() {
         return listOfficeBoardCode;
     }
@@ -134,6 +153,14 @@ public class Listing {
         this.list207 = list207;
     }
 
+    public Long getRowNum() {
+        return rowNum;
+    }
+
+    public void setRowNum(Long rowNum) {
+        this.rowNum = rowNum;
+    }
+
     @Override
     public String toString() {
         return "Listing{" +
@@ -147,8 +174,11 @@ public class Listing {
                 ", nbrOfAcres='" + nbrOfAcres + '\'' +
                 ", coListingMemberUrl='" + coListingMemberUrl + '\'' +
                 ", coListAgentId='" + coListAgentId + '\'' +
+                ", buyerAgentId='" + buyerAgentId + '\'' +
+                ", coBuyerAgentId='" + coBuyerAgentId + '\'' +
                 ", listOfficeBoardCode='" + listOfficeBoardCode + '\'' +
                 ", list207='" + list207 + '\'' +
+                ", rowNum=" + rowNum +
                 '}';
     }
 }
