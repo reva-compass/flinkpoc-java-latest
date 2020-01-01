@@ -1,7 +1,6 @@
 package com.flink.poc;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -11,6 +10,7 @@ import org.apache.flink.streaming.util.serialization.JSONKeyValueDeserialization
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.java.StreamTableEnvironment;
+import org.apache.flink.types.Row;
 
 import java.util.Properties;
 
@@ -30,12 +30,12 @@ public class TestBlink {
         return properties;
     }
 
-    private static void processListings() {
+    private static Table processListings() {
         Properties properties = setProps();
         FlinkKafkaConsumer<ObjectNode> kafkaConsumer =
                 new FlinkKafkaConsumer<>("poc_test_listing", new JSONKeyValueDeserializationSchema(true), properties);
         kafkaConsumer.setStartFromEarliest();
-        DataStream<Listing> stream = bsEnv.addSource(kafkaConsumer).map((MapFunction<ObjectNode, Listing>) jsonNodes -> {
+        DataStream<Listing> listingStream = bsEnv.addSource(kafkaConsumer).map((MapFunction<ObjectNode, Listing>) jsonNodes -> {
             JsonNode jsonNode = jsonNodes.get("value");
             Listing listing = new Listing();
             listing.setListingId(jsonNode.get("Listing ID").textValue());
@@ -43,18 +43,24 @@ public class TestBlink {
             listing.setStatusChangeDate(jsonNode.get("Status Change Date").textValue());
             listing.setInclusions(jsonNode.get("Inclusions").textValue());
             listing.setCounty(jsonNode.get("County").textValue());
-            listing.setAgentId(jsonNode.get("Agent ID").textValue());
+            if (jsonNode.has("Agent ID"))
+                listing.setAgentId(jsonNode.get("Agent ID").textValue());
             listing.setTermsOffered(jsonNode.get("Terms Offered").textValue());
             listing.setNbrOfAcres(jsonNode.get("Nbr of Acres").textValue());
             listing.setCoListingMemberUrl(jsonNode.get("CoListingMemberUrl").textValue());
-            listing.setCoListAgentId(jsonNode.get("CoList Agent ID").textValue());
+            if (jsonNode.has("CoList Agent ID"))
+                listing.setCoListAgentId(jsonNode.get("CoList Agent ID").textValue());
+            if (jsonNode.has("Buyer Agent ID"))
+                listing.setBuyerAgentId(jsonNode.get("Buyer Agent ID").textValue());
+            if (jsonNode.has("CoBuyer Agent ID"))
+                listing.setCoBuyerAgentId(jsonNode.get("CoBuyer Agent ID").textValue());
             listing.setListOfficeBoardCode(jsonNode.get("List Office Board Code").textValue());
             listing.setList207(jsonNode.get("LIST_207").textValue());
-           // System.out.println("### list obj " + listing);
+            // System.out.println("### list obj " + listing);
             return listing;
         });
 
-        bsTableEnv.registerDataStream("Orders", stream, "listingId, " +
+        bsTableEnv.registerDataStream("Listings", listingStream, "listingId, " +
                 "earnestPayableTo, " +
                 "statusChangeDate, " +
                 "inclusions, " +
@@ -64,17 +70,93 @@ public class TestBlink {
                 "nbrOfAcres, " +
                 "coListingMemberUrl, " +
                 "coListAgentId, " +
+                "buyerAgentId, " +
+                "coBuyerAgentId, " +
                 "listOfficeBoardCode, " +
-                "list207");
-        Table result2 = bsTableEnv.sqlQuery(
-                "SELECT * FROM Orders");
-        bsTableEnv.toAppendStream(result2, Listing.class).print();
+                "list207," +
+                "proctime.proctime");
+//        Table result2 = bsTableEnv.sqlQuery(
+//                "SELECT * FROM Listings");
+//        bsTableEnv.toAppendStream(result2, Row.class).print();
 
+        Table latestListingsTbl = bsTableEnv.sqlQuery("SELECT * FROM (" +
+                "SELECT *, ROW_NUMBER() " +
+                "OVER (PARTITION BY listingId ORDER BY proctime DESC) " +
+                "AS row_num FROM Listings)" +
+                "WHERE row_num = 1");
+        return latestListingsTbl;
+    }
+
+    private static Table processAgents() {
+        Properties properties = setProps();
+        FlinkKafkaConsumer<ObjectNode> agentKafkaConsumer = new FlinkKafkaConsumer<>("poc_test_agent", new JSONKeyValueDeserializationSchema(true), properties);
+        agentKafkaConsumer.setStartFromEarliest();
+        DataStream<Agent> agentStream = bsEnv.addSource(agentKafkaConsumer).map((MapFunction<ObjectNode, Agent>) jsonNodes -> {
+            JsonNode jsonNode = jsonNodes.get("value");
+            Agent agent = new Agent();
+            agent.setAgentId(jsonNode.get("Agent ID").textValue());
+            agent.setCity(jsonNode.get("City").textValue());
+            agent.setOfficeId(jsonNode.get("Office ID").textValue());
+            agent.setEmail(jsonNode.get("Email").textValue());
+            agent.setRenegotiationExp(jsonNode.get("RENegotiation Exp").textValue());
+            agent.setNrdsid(jsonNode.get("NRDSID").textValue());
+            agent.setMlsStatus(jsonNode.get("MLS Status").textValue());
+            agent.setAgentTimestamp(jsonNode.get("agent_timestamp").textValue());
+            return agent;
+        });
+
+        bsTableEnv.registerDataStream("Agents", agentStream, "agentId, " +
+                "city, " +
+                "officeId, " +
+                "email, " +
+                "renegotiationExp, " +
+                "nrdsid, " +
+                "mlsStatus, " +
+                "agentTimestamp, " +
+                "proctime.proctime");
+
+        Table latestAgentsTbl = bsTableEnv.sqlQuery("SELECT * FROM (" +
+                "SELECT *, ROW_NUMBER() " +
+                "OVER (PARTITION BY agentId ORDER BY proctime DESC) " +
+                "AS row_num FROM Agents)" +
+                "WHERE row_num = 1");
+
+        return latestAgentsTbl;
     }
 
     public static void main(String[] args) throws Exception {
-       processListings();
         System.out.println("### inside main");
+
+        /**
+         * LISTINGS
+         */
+        Table latestListingsTbl = processListings();
+        bsTableEnv.registerTable("latestListings", latestListingsTbl);
+        Table result3 = bsTableEnv.sqlQuery(
+                "SELECT * FROM latestListings");
+        //   bsTableEnv.toRetractStream(result3, Row.class).print();
+
+        /**
+         * AGENTS
+         */
+        Table latestAgentsTbl = processAgents();
+        bsTableEnv.registerTable("latestAgents", latestAgentsTbl);
+        Table result4 = bsTableEnv.sqlQuery(
+                "SELECT * FROM latestAgents");
+        //   bsTableEnv.toRetractStream(result4, Row.class).print();
+
+        /**
+         * JOIN
+         */
+        Table joinedTbl = bsTableEnv.sqlQuery(
+                "SELECT * FROM latestListings l " +
+                        "LEFT JOIN latestAgents aa ON l.agentId = aa.agentId " +
+                        "LEFT JOIN latestAgents ab ON l.coListAgentId = ab.agentId " +
+                        "LEFT JOIN latestAgents ac ON l.buyerAgentId = ac.agentId " +
+                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentId = ad.agentId"
+        );
+        bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
+
         bsEnv.execute("test-job");
 
     }
