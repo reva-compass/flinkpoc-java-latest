@@ -1,4 +1,4 @@
-package com.flink.poc;
+package com.flink.poc.test;
 
 public class Agent {
 

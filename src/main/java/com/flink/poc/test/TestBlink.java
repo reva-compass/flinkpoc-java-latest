@@ -1,5 +1,7 @@
-package com.flink.poc;
+package com.flink.poc.test;
 
+import com.flink.poc.test.Agent;
+import com.flink.poc.test.Listing;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.node.ObjectNode;
