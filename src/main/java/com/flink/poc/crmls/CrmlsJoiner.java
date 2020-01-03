@@ -1,12 +1,14 @@
 package com.flink.poc.crmls;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.streaming.util.serialization.JSONKeyValueDeserializationSchema;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
@@ -18,10 +20,29 @@ import java.util.Properties;
 
 public class CrmlsJoiner {
 
-    private static StreamExecutionEnvironment bsEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+    private static StreamExecutionEnvironment bsEnv;
+
+    static {
+        bsEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        // start a checkpoint every 1000 ms
+        bsEnv.enableCheckpointing(1000);
+
+        // make sure 500 ms of progress happen between checkpoints
+        // bsEnv.getCheckpointConfig().setMinPauseBetweenCheckpoints(500);
+
+        // checkpoints have to complete within one minute, or are discarded
+        // bsEnv.getCheckpointConfig().setCheckpointTimeout(60000);
+
+        // allow job recovery fallback to checkpoint when there is a more recent savepoint
+        // bsEnv.getCheckpointConfig().setPreferCheckpointForRecovery(true);
+    }
+
     private static EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
     private static StreamTableEnvironment bsTableEnv = StreamTableEnvironment.create(bsEnv, bsSettings);
     private static ObjectMapper mapper = new ObjectMapper();
+    private static FlinkKafkaProducer<Tuple2<Boolean, Row>> kafkaProducer =
+            new FlinkKafkaProducer("test-topic", new JoinedSerializer("test-topic"), setProps(), FlinkKafkaProducer.Semantic.AT_LEAST_ONCE);
 
     private static Properties setProps() {
 
@@ -34,6 +55,7 @@ public class CrmlsJoiner {
 
     private static Table processListings() {
         Properties properties = setProps();
+        properties.setProperty("group.id", "listings-group");
         FlinkKafkaConsumer<ObjectNode> kafkaConsumer =
                 new FlinkKafkaConsumer<>("la_crmls_rets-listings-neo", new JSONKeyValueDeserializationSchema(true), properties);
         kafkaConsumer.setStartFromEarliest();
@@ -102,6 +124,7 @@ public class CrmlsJoiner {
 
     private static Table processAgents() {
         Properties properties = setProps();
+        properties.setProperty("group.id", "agents-group");
         FlinkKafkaConsumer<ObjectNode> agentKafkaConsumer = new FlinkKafkaConsumer<>("la_crmls_rets-agents-neo", new JSONKeyValueDeserializationSchema(true), properties);
         agentKafkaConsumer.setStartFromEarliest();
         DataStream<Agent> agentStream = bsEnv.addSource(agentKafkaConsumer).map((MapFunction<ObjectNode, Agent>) jsonNodes -> {
@@ -169,8 +192,8 @@ public class CrmlsJoiner {
                         "LEFT JOIN latestAgents ac ON l.coListAgentKey = ac.ucPK " +
                         "LEFT JOIN latestAgents ad ON l.coBuyerAgentKey = ad.ucPK"
         );
-        bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
-
+        DataStream<Tuple2<Boolean, Row>> joinedStream = bsTableEnv.toRetractStream(joinedTbl, Row.class);
+        joinedStream.addSink(kafkaProducer);
         bsEnv.execute("test-job");
 
     }
