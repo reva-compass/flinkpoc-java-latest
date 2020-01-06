@@ -29,7 +29,7 @@ public class CrmlsJoiner {
         bsEnv.enableCheckpointing(1000);
 
         // make sure 500 ms of progress happen between checkpoints
-        // bsEnv.getCheckpointConfig().setMinPauseBetweenCheckpoints(500);
+        bsEnv.getCheckpointConfig().setMinPauseBetweenCheckpoints(500);
 
         // checkpoints have to complete within one minute, or are discarded
         // bsEnv.getCheckpointConfig().setCheckpointTimeout(60000);
@@ -161,6 +161,90 @@ public class CrmlsJoiner {
         return latestAgentsTbl;
     }
 
+    private static Table processOffices() {
+        Properties properties = setProps();
+        properties.setProperty("group.id", "offices-group");
+        FlinkKafkaConsumer<ObjectNode> officeKafkaConsumer = new FlinkKafkaConsumer<>("la_crmls_rets-offices-neo", new JSONKeyValueDeserializationSchema(true), properties);
+        officeKafkaConsumer.setStartFromEarliest();
+        DataStream<Office> officeStream = bsEnv.addSource(officeKafkaConsumer).map((MapFunction<ObjectNode, Office>) jsonNodes -> {
+            JsonNode jsonNode = jsonNodes.get("value");
+            Office office = new Office();
+            if (jsonNode.has("uc_pk"))
+                office.setUcPK(jsonNode.get("uc_pk").textValue());
+            if (jsonNode.has("uc_update_ts"))
+                office.setUcUpdateTS(jsonNode.get("uc_update_ts").textValue());
+            if (jsonNode.has("uc_version"))
+                office.setUcVersion(jsonNode.get("uc_version").textValue());
+            if (jsonNode.has("uc_row_type"))
+                office.setUcRowType(jsonNode.get("uc_row_type").textValue());
+            if (jsonNode.has("uc_type"))
+                office.setUcType(jsonNode.get("uc_type").textValue());
+            office.setData(jsonNode.get("data").textValue());
+            return office;
+        });
+
+        bsTableEnv.registerDataStream("Offices", officeStream, "ucPK, " +
+                "ucUpdateTS, " +
+                "ucVersion, " +
+                "ucRowType, " +
+                "ucType, " +
+                "data," +
+                "proctime.proctime");
+
+        Table latestOfficesTbl = bsTableEnv.sqlQuery("SELECT * FROM (" +
+                "SELECT *, ROW_NUMBER() " +
+                "OVER (PARTITION BY ucPK ORDER BY proctime DESC) " +
+                "AS row_num FROM Offices)" +
+                "WHERE row_num = 1");
+
+        return latestOfficesTbl;
+    }
+
+    private static Table processOpenHouses() {
+        Properties properties = setProps();
+        properties.setProperty("group.id", "openhouses-group");
+        FlinkKafkaConsumer<ObjectNode> openHouseKafkaConsumer = new FlinkKafkaConsumer<>("la_crmls_rets-openhouses-neo", new JSONKeyValueDeserializationSchema(true), properties);
+        openHouseKafkaConsumer.setStartFromEarliest();
+        DataStream<OpenHouse> openHouseStream = bsEnv.addSource(openHouseKafkaConsumer).map((MapFunction<ObjectNode, OpenHouse>) jsonNodes -> {
+            JsonNode jsonNode = jsonNodes.get("value");
+            OpenHouse openHouse = new OpenHouse();
+            if (jsonNode.has("uc_pk"))
+                openHouse.setUcPK(jsonNode.get("uc_pk").textValue());
+            if (jsonNode.has("uc_update_ts"))
+                openHouse.setUcUpdateTS(jsonNode.get("uc_update_ts").textValue());
+            if (jsonNode.has("uc_version"))
+                openHouse.setUcVersion(jsonNode.get("uc_version").textValue());
+            if (jsonNode.has("uc_row_type"))
+                openHouse.setUcRowType(jsonNode.get("uc_row_type").textValue());
+            if (jsonNode.has("uc_type"))
+                openHouse.setUcType(jsonNode.get("uc_type").textValue());
+            String dataStr = jsonNode.get("data").textValue();
+            JsonNode dataNode = mapper.readTree(dataStr);
+            openHouse.setData(dataStr);
+            if (dataNode.has("ListingKeyNumeric"))
+                openHouse.setListingKey(dataNode.get("ListingKeyNumeric").textValue());
+            return openHouse;
+        });
+
+        bsTableEnv.registerDataStream("OpenHouses", openHouseStream, "ucPK, " +
+                "ucUpdateTS, " +
+                "ucVersion, " +
+                "ucRowType, " +
+                "ucType, " +
+                "listingKey, " +
+                "data," +
+                "proctime.proctime");
+
+        Table latestOpenHousesTbl = bsTableEnv.sqlQuery("SELECT * FROM (" +
+                "SELECT *, ROW_NUMBER() " +
+                "OVER (PARTITION BY ucPK ORDER BY proctime DESC) " +
+                "AS row_num FROM OpenHouses)" +
+                "WHERE row_num = 1");
+
+        return latestOpenHousesTbl;
+    }
+
+
     public static void main(String[] args) throws Exception {
         System.out.println("### inside main");
 
@@ -183,6 +267,24 @@ public class CrmlsJoiner {
 //        bsTableEnv.toRetractStream(result4, Row.class).print();
 
         /**
+         * OFFICES
+         */
+        Table latestOfficesTbl = processOffices();
+        bsTableEnv.registerTable("latestOffices", latestOfficesTbl);
+//        Table ofcResult = bsTableEnv.sqlQuery(
+//                "SELECT * FROM latestOffices");
+//        bsTableEnv.toRetractStream(ofcResult, Row.class).print();
+
+        /**
+         * OPEN HOUSES
+         */
+        Table latestOpenHousesTbl = processOpenHouses();
+        bsTableEnv.registerTable("latestOpenHouses", latestOpenHousesTbl);
+//        Table ohResult = bsTableEnv.sqlQuery(
+//                "SELECT * FROM latestOpenHouses");
+//        bsTableEnv.toRetractStream(ohResult, Row.class).print();
+
+        /**
          * JOIN
          */
         Table joinedTbl = bsTableEnv.sqlQuery(
@@ -190,13 +292,18 @@ public class CrmlsJoiner {
                         "LEFT JOIN latestAgents aa ON l.listAgentKey = aa.ucPK " +
                         "LEFT JOIN latestAgents ab ON l.buyerAgentKey = ab.ucPK " +
                         "LEFT JOIN latestAgents ac ON l.coListAgentKey = ac.ucPK " +
-                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentKey = ad.ucPK"
+                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentKey = ad.ucPK " +
+                        "LEFT JOIN latestOffices oa ON l.listOfficeKey = oa.ucPK " +
+                        "LEFT JOIN latestOffices ob ON l.buyerOfficeKey = ob.ucPK " +
+                        "LEFT JOIN latestOffices oc ON l.coListOfficeKey = oc.ucPK " +
+                        "LEFT JOIN latestOffices od ON l.coBuyerOfficeKey = od.ucPK " +
+                        "LEFT JOIN latestOpenHouses oh ON l.listingKey = oh.listingKey"
         );
+        //bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
         DataStream<Tuple2<Boolean, Row>> joinedStream = bsTableEnv.toRetractStream(joinedTbl, Row.class);
         joinedStream.addSink(kafkaProducer);
         bsEnv.execute("test-job");
 
     }
-
 
 }
