@@ -1,7 +1,5 @@
 package com.flink.poc.test;
 
-import com.flink.poc.test.Agent;
-import com.flink.poc.test.Listing;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.node.ObjectNode;
@@ -58,7 +56,7 @@ public class TestBlink {
                 listing.setCoBuyerAgentId(jsonNode.get("CoBuyer Agent ID").textValue());
             listing.setListOfficeBoardCode(jsonNode.get("List Office Board Code").textValue());
             listing.setList207(jsonNode.get("LIST_207").textValue());
-            // System.out.println("### list obj " + listing);
+            System.out.println("### list obj " + listing);
             return listing;
         });
 
@@ -136,28 +134,28 @@ public class TestBlink {
         bsTableEnv.registerTable("latestListings", latestListingsTbl);
         Table result3 = bsTableEnv.sqlQuery(
                 "SELECT * FROM latestListings");
-        //   bsTableEnv.toRetractStream(result3, Row.class).print();
+        bsTableEnv.toRetractStream(result3, Row.class).print();
 
-        /**
-         * AGENTS
-         */
-        Table latestAgentsTbl = processAgents();
-        bsTableEnv.registerTable("latestAgents", latestAgentsTbl);
-        Table result4 = bsTableEnv.sqlQuery(
-                "SELECT * FROM latestAgents");
-        //   bsTableEnv.toRetractStream(result4, Row.class).print();
-
-        /**
-         * JOIN
-         */
-        Table joinedTbl = bsTableEnv.sqlQuery(
-                "SELECT * FROM latestListings l " +
-                        "LEFT JOIN latestAgents aa ON l.agentId = aa.agentId " +
-                        "LEFT JOIN latestAgents ab ON l.coListAgentId = ab.agentId " +
-                        "LEFT JOIN latestAgents ac ON l.buyerAgentId = ac.agentId " +
-                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentId = ad.agentId"
-        );
-        bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
+//        /**
+//         * AGENTS
+//         */
+//        Table latestAgentsTbl = processAgents();
+//        bsTableEnv.registerTable("latestAgents", latestAgentsTbl);
+//        Table result4 = bsTableEnv.sqlQuery(
+//                "SELECT * FROM latestAgents");
+//        //   bsTableEnv.toRetractStream(result4, Row.class).print();
+//
+//        /**
+//         * JOIN
+//         */
+//        Table joinedTbl = bsTableEnv.sqlQuery(
+//                "SELECT * FROM latestListings l " +
+//                        "LEFT JOIN latestAgents aa ON l.agentId = aa.agentId " +
+//                        "LEFT JOIN latestAgents ab ON l.coListAgentId = ab.agentId " +
+//                        "LEFT JOIN latestAgents ac ON l.buyerAgentId = ac.agentId " +
+//                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentId = ad.agentId"
+//        );
+//        bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
 
         bsEnv.execute("test-job");
 

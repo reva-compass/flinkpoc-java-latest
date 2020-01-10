@@ -307,9 +307,10 @@ public class CrmlsJoiner {
          */
         Table latestListingsTbl = processListings();
         bsTableEnv.registerTable("latestListings", latestListingsTbl);
-//        Table result3 = bsTableEnv.sqlQuery(
-//                "SELECT * FROM latestListings");
-//        bsTableEnv.toRetractStream(result3, Row.class).print();
+        Table result3 = bsTableEnv.sqlQuery(
+                "SELECT * FROM latestListings");
+        bsTableEnv.toRetractStream(result3, Row.class).print();
+
 
         /**
          * AGENTS
@@ -341,21 +342,21 @@ public class CrmlsJoiner {
         /**
          * JOIN
          */
-        Table joinedTbl = bsTableEnv.sqlQuery(
-                "SELECT * FROM latestListings l " +
-                        "LEFT JOIN latestAgents aa ON l.listAgentKey = aa.ucPK " +
-                        "LEFT JOIN latestAgents ab ON l.buyerAgentKey = ab.ucPK " +
-                        "LEFT JOIN latestAgents ac ON l.coListAgentKey = ac.ucPK " +
-                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentKey = ad.ucPK " +
-                        "LEFT JOIN latestOffices oa ON l.listOfficeKey = oa.ucPK " +
-                        "LEFT JOIN latestOffices ob ON l.buyerOfficeKey = ob.ucPK " +
-                        "LEFT JOIN latestOffices oc ON l.coListOfficeKey = oc.ucPK " +
-                        "LEFT JOIN latestOffices od ON l.coBuyerOfficeKey = od.ucPK " +
-                        "LEFT JOIN latestOpenHouses oh ON l.listingKey = oh.listingKey"
-        );
-        //       bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
-        DataStream<Tuple2<Boolean, Row>> joinedStream = bsTableEnv.toRetractStream(joinedTbl, Row.class);
-        joinedStream.addSink(kafkaProducer);
+//        Table joinedTbl = bsTableEnv.sqlQuery(
+//                "SELECT * FROM latestListings l " +
+//                        "LEFT JOIN latestAgents aa ON l.listAgentKey = aa.ucPK " +
+//                        "LEFT JOIN latestAgents ab ON l.buyerAgentKey = ab.ucPK " +
+//                        "LEFT JOIN latestAgents ac ON l.coListAgentKey = ac.ucPK " +
+//                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentKey = ad.ucPK " +
+//                        "LEFT JOIN latestOffices oa ON l.listOfficeKey = oa.ucPK " +
+//                        "LEFT JOIN latestOffices ob ON l.buyerOfficeKey = ob.ucPK " +
+//                        "LEFT JOIN latestOffices oc ON l.coListOfficeKey = oc.ucPK " +
+//                        "LEFT JOIN latestOffices od ON l.coBuyerOfficeKey = od.ucPK " +
+//                        "LEFT JOIN latestOpenHouses oh ON l.listingKey = oh.listingKey"
+//        );
+//        //       bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
+//        DataStream<Tuple2<Boolean, Row>> joinedStream = bsTableEnv.toRetractStream(joinedTbl, Row.class);
+//        joinedStream.addSink(kafkaProducer);
         bsEnv.execute("test-job");
 
     }
