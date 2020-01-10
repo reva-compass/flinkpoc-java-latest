@@ -26,10 +26,10 @@ public class CrmlsJoiner {
         bsEnv = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // start a checkpoint every 1000 ms
-        bsEnv.enableCheckpointing(1000);
+        bsEnv.enableCheckpointing(2000);
 
         // make sure 500 ms of progress happen between checkpoints
-        bsEnv.getCheckpointConfig().setMinPauseBetweenCheckpoints(500);
+        bsEnv.getCheckpointConfig().setMinPauseBetweenCheckpoints(1500);
 
         // checkpoints have to complete within one minute, or are discarded
         // bsEnv.getCheckpointConfig().setCheckpointTimeout(60000);
@@ -44,6 +44,18 @@ public class CrmlsJoiner {
     private static FlinkKafkaProducer<Tuple2<Boolean, Row>> kafkaProducer =
             new FlinkKafkaProducer("test-topic", new JoinedSerializer("test-topic"), setProps(), FlinkKafkaProducer.Semantic.AT_LEAST_ONCE);
 
+    /* TOPICS */
+    private static String listingsTopic = "la_crmls_rets-listings-p";
+    private static String agentsTopic = "la_crmls_rets-agents-p";
+    private static String officesTopic = "la_crmls_rets-offices-p";
+    private static String openHousesTopic = "la_crmls_rets-openhouses-p";
+
+    /* CONSUMER GROUPS */
+    private static String listingsConsumerGroup = "";
+    private static String agentsConsumerGroup = "";
+    private static String officesConsumerGroup = "";
+    private static String openHousesConsumerGroup = "";
+
     private static Properties setProps() {
 
         Properties properties = new Properties();
@@ -57,7 +69,7 @@ public class CrmlsJoiner {
         Properties properties = setProps();
         properties.setProperty("group.id", "listings-group");
         FlinkKafkaConsumer<ObjectNode> kafkaConsumer =
-                new FlinkKafkaConsumer<>("la_crmls_rets-listings-neo", new JSONKeyValueDeserializationSchema(true), properties);
+                new FlinkKafkaConsumer<>(listingsTopic, new JSONKeyValueDeserializationSchema(true), properties);
         kafkaConsumer.setStartFromEarliest();
         DataStream<Listing> listingStream = bsEnv.addSource(kafkaConsumer).map((MapFunction<ObjectNode, Listing>) jsonNodes -> {
             JsonNode jsonNode = jsonNodes.get("value");
@@ -95,7 +107,7 @@ public class CrmlsJoiner {
                 listing.setCoBuyerOfficeKey(dataNode.get("CoBuyerOfficeKeyNumeric").textValue());
             //  System.out.println("### list obj " + listing);
             return listing;
-        });
+        }).name("Source: Listings");
 
         bsTableEnv.registerDataStream("Listings", listingStream, "ucPK, " +
                 "ucUpdateTS, " +
@@ -125,7 +137,7 @@ public class CrmlsJoiner {
     private static Table processAgents() {
         Properties properties = setProps();
         properties.setProperty("group.id", "agents-group");
-        FlinkKafkaConsumer<ObjectNode> agentKafkaConsumer = new FlinkKafkaConsumer<>("la_crmls_rets-agents-neo", new JSONKeyValueDeserializationSchema(true), properties);
+        FlinkKafkaConsumer<ObjectNode> agentKafkaConsumer = new FlinkKafkaConsumer<>(agentsTopic, new JSONKeyValueDeserializationSchema(true), properties);
         agentKafkaConsumer.setStartFromEarliest();
         DataStream<Agent> agentStream = bsEnv.addSource(agentKafkaConsumer).map((MapFunction<ObjectNode, Agent>) jsonNodes -> {
             JsonNode jsonNode = jsonNodes.get("value");
@@ -142,7 +154,7 @@ public class CrmlsJoiner {
                 agent.setUcType(jsonNode.get("uc_type").textValue());
             agent.setData(jsonNode.get("data").textValue());
             return agent;
-        });
+        }).name("Source: Agents");
 
         bsTableEnv.registerDataStream("Agents", agentStream, "ucPK, " +
                 "ucUpdateTS, " +
@@ -164,7 +176,7 @@ public class CrmlsJoiner {
     private static Table processOffices() {
         Properties properties = setProps();
         properties.setProperty("group.id", "offices-group");
-        FlinkKafkaConsumer<ObjectNode> officeKafkaConsumer = new FlinkKafkaConsumer<>("la_crmls_rets-offices-neo", new JSONKeyValueDeserializationSchema(true), properties);
+        FlinkKafkaConsumer<ObjectNode> officeKafkaConsumer = new FlinkKafkaConsumer<>(officesTopic, new JSONKeyValueDeserializationSchema(true), properties);
         officeKafkaConsumer.setStartFromEarliest();
         DataStream<Office> officeStream = bsEnv.addSource(officeKafkaConsumer).map((MapFunction<ObjectNode, Office>) jsonNodes -> {
             JsonNode jsonNode = jsonNodes.get("value");
@@ -181,7 +193,7 @@ public class CrmlsJoiner {
                 office.setUcType(jsonNode.get("uc_type").textValue());
             office.setData(jsonNode.get("data").textValue());
             return office;
-        });
+        }).name("Source: Offices");
 
         bsTableEnv.registerDataStream("Offices", officeStream, "ucPK, " +
                 "ucUpdateTS, " +
@@ -203,7 +215,7 @@ public class CrmlsJoiner {
     private static Table processOpenHouses() {
         Properties properties = setProps();
         properties.setProperty("group.id", "openhouses-group");
-        FlinkKafkaConsumer<ObjectNode> openHouseKafkaConsumer = new FlinkKafkaConsumer<>("la_crmls_rets-openhouses-neo", new JSONKeyValueDeserializationSchema(true), properties);
+        FlinkKafkaConsumer<ObjectNode> openHouseKafkaConsumer = new FlinkKafkaConsumer<>(openHousesTopic, new JSONKeyValueDeserializationSchema(true), properties);
         openHouseKafkaConsumer.setStartFromEarliest();
         DataStream<OpenHouse> openHouseStream = bsEnv.addSource(openHouseKafkaConsumer).map((MapFunction<ObjectNode, OpenHouse>) jsonNodes -> {
             JsonNode jsonNode = jsonNodes.get("value");
@@ -224,7 +236,7 @@ public class CrmlsJoiner {
             if (dataNode.has("ListingKeyNumeric"))
                 openHouse.setListingKey(dataNode.get("ListingKeyNumeric").textValue());
             return openHouse;
-        });
+        }).name("Source: OpenHouses");
 
         bsTableEnv.registerDataStream("OpenHouses", openHouseStream, "ucPK, " +
                 "ucUpdateTS, " +
@@ -299,7 +311,7 @@ public class CrmlsJoiner {
                         "LEFT JOIN latestOffices od ON l.coBuyerOfficeKey = od.ucPK " +
                         "LEFT JOIN latestOpenHouses oh ON l.listingKey = oh.listingKey"
         );
-        //bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
+        //       bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
         DataStream<Tuple2<Boolean, Row>> joinedStream = bsTableEnv.toRetractStream(joinedTbl, Row.class);
         joinedStream.addSink(kafkaProducer);
         bsEnv.execute("test-job");
