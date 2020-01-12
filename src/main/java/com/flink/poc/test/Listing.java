@@ -5,17 +5,17 @@ import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
 public class Listing {
 
     private String listingId;
+    private String agentId;
+    private String buyerAgentId;
+    private String coListAgentId;
+    private String coBuyerAgentId;
     private String earnestPayableTo;
     private String statusChangeDate;
     private String inclusions;
     private String county;
-    private String agentId;
     private String termsOffered;
     private String nbrOfAcres;
     private String coListingMemberUrl;
-    private String coListAgentId;
-    private String buyerAgentId;
-    private String coBuyerAgentId;
     private String listOfficeBoardCode;
     private String list207;
     private Long rowNum;
@@ -165,17 +165,17 @@ public class Listing {
     public String toString() {
         return "Listing{" +
                 "listingId='" + listingId + '\'' +
+                ", agentId='" + agentId + '\'' +
+                ", buyerAgentId='" + buyerAgentId + '\'' +
+                ", coListAgentId='" + coListAgentId + '\'' +
+                ", coBuyerAgentId='" + coBuyerAgentId + '\'' +
                 ", earnestPayableTo='" + earnestPayableTo + '\'' +
                 ", statusChangeDate='" + statusChangeDate + '\'' +
                 ", inclusions='" + inclusions + '\'' +
                 ", county='" + county + '\'' +
-                ", agentId='" + agentId + '\'' +
                 ", termsOffered='" + termsOffered + '\'' +
                 ", nbrOfAcres='" + nbrOfAcres + '\'' +
                 ", coListingMemberUrl='" + coListingMemberUrl + '\'' +
-                ", coListAgentId='" + coListAgentId + '\'' +
-                ", buyerAgentId='" + buyerAgentId + '\'' +
-                ", coBuyerAgentId='" + coBuyerAgentId + '\'' +
                 ", listOfficeBoardCode='" + listOfficeBoardCode + '\'' +
                 ", list207='" + list207 + '\'' +
                 ", rowNum=" + rowNum +

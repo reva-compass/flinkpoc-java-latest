@@ -32,6 +32,7 @@ public class TestBlink {
 
     private static Table processListings() {
         Properties properties = setProps();
+        properties.setProperty("group.id", "listings-group");
         FlinkKafkaConsumer<ObjectNode> kafkaConsumer =
                 new FlinkKafkaConsumer<>("poc_test_listing", new JSONKeyValueDeserializationSchema(true), properties);
         kafkaConsumer.setStartFromEarliest();
@@ -61,17 +62,17 @@ public class TestBlink {
         });
 
         bsTableEnv.registerDataStream("Listings", listingStream, "listingId, " +
+                "agentId, " +
+                "buyerAgentId, " +
+                "coListAgentId, " +
+                "coBuyerAgentId, " +
                 "earnestPayableTo, " +
                 "statusChangeDate, " +
                 "inclusions, " +
                 "county, " +
-                "agentId, " +
                 "termsOffered, " +
                 "nbrOfAcres, " +
                 "coListingMemberUrl, " +
-                "coListAgentId, " +
-                "buyerAgentId, " +
-                "coBuyerAgentId, " +
                 "listOfficeBoardCode, " +
                 "list207," +
                 "proctime.proctime");
@@ -89,6 +90,7 @@ public class TestBlink {
 
     private static Table processAgents() {
         Properties properties = setProps();
+        properties.setProperty("group.id", "agents-group");
         FlinkKafkaConsumer<ObjectNode> agentKafkaConsumer = new FlinkKafkaConsumer<>("poc_test_agent", new JSONKeyValueDeserializationSchema(true), properties);
         agentKafkaConsumer.setStartFromEarliest();
         DataStream<Agent> agentStream = bsEnv.addSource(agentKafkaConsumer).map((MapFunction<ObjectNode, Agent>) jsonNodes -> {
@@ -132,30 +134,30 @@ public class TestBlink {
          */
         Table latestListingsTbl = processListings();
         bsTableEnv.registerTable("latestListings", latestListingsTbl);
-        Table result3 = bsTableEnv.sqlQuery(
-                "SELECT * FROM latestListings");
-        bsTableEnv.toRetractStream(result3, Row.class).print();
+//        Table result3 = bsTableEnv.sqlQuery(
+//                "SELECT * FROM latestListings");
+//        bsTableEnv.toRetractStream(result3, Row.class).print();
 
-//        /**
-//         * AGENTS
-//         */
-//        Table latestAgentsTbl = processAgents();
-//        bsTableEnv.registerTable("latestAgents", latestAgentsTbl);
+        /**
+         * AGENTS
+         */
+        Table latestAgentsTbl = processAgents();
+        bsTableEnv.registerTable("latestAgents", latestAgentsTbl);
 //        Table result4 = bsTableEnv.sqlQuery(
 //                "SELECT * FROM latestAgents");
 //        //   bsTableEnv.toRetractStream(result4, Row.class).print();
-//
-//        /**
-//         * JOIN
-//         */
-//        Table joinedTbl = bsTableEnv.sqlQuery(
-//                "SELECT * FROM latestListings l " +
-//                        "LEFT JOIN latestAgents aa ON l.agentId = aa.agentId " +
-//                        "LEFT JOIN latestAgents ab ON l.coListAgentId = ab.agentId " +
+
+        /**
+         * JOIN
+         */
+        Table joinedTbl = bsTableEnv.sqlQuery(
+                "SELECT * FROM latestListings l " +
+                        "LEFT JOIN latestAgents aa ON l.agentId = aa.agentId " +
+                        "LEFT JOIN latestAgents ab ON ( l.coListAgentId = ab.agentId AND l.coListAgentId is not null ) " +
 //                        "LEFT JOIN latestAgents ac ON l.buyerAgentId = ac.agentId " +
-//                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentId = ad.agentId"
-//        );
-//        bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
+                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentId = ad.agentId"
+        );
+        bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
 
         bsEnv.execute("test-job");
 
