@@ -2,70 +2,70 @@ package com.flink.poc.crmls;
 
 public class Office {
 
-    private String ucPK;
-    private String ucUpdateTS;
-    private String ucVersion;
-    private String ucRowType;
-    private String ucType;
-    private String data;
+    private String ucPKO;
+    private String ucUpdateTSO;
+    private String ucVersionO;
+    private String ucRowTypeO;
+    private String ucTypeO;
+    private String dataO;
 
-    public String getUcPK() {
-        return ucPK;
+    public String getUcPKO() {
+        return ucPKO;
     }
 
-    public void setUcPK(String ucPK) {
-        this.ucPK = ucPK;
+    public void setUcPKO(String ucPKO) {
+        this.ucPKO = ucPKO;
     }
 
-    public String getUcUpdateTS() {
-        return ucUpdateTS;
+    public String getUcUpdateTSO() {
+        return ucUpdateTSO;
     }
 
-    public void setUcUpdateTS(String ucUpdateTS) {
-        this.ucUpdateTS = ucUpdateTS;
+    public void setUcUpdateTSO(String ucUpdateTSO) {
+        this.ucUpdateTSO = ucUpdateTSO;
     }
 
-    public String getUcVersion() {
-        return ucVersion;
+    public String getUcVersionO() {
+        return ucVersionO;
     }
 
-    public void setUcVersion(String ucVersion) {
-        this.ucVersion = ucVersion;
+    public void setUcVersionO(String ucVersionO) {
+        this.ucVersionO = ucVersionO;
     }
 
-    public String getUcRowType() {
-        return ucRowType;
+    public String getUcRowTypeO() {
+        return ucRowTypeO;
     }
 
-    public void setUcRowType(String ucRowType) {
-        this.ucRowType = ucRowType;
+    public void setUcRowTypeO(String ucRowTypeO) {
+        this.ucRowTypeO = ucRowTypeO;
     }
 
-    public String getUcType() {
-        return ucType;
+    public String getUcTypeO() {
+        return ucTypeO;
     }
 
-    public void setUcType(String ucType) {
-        this.ucType = ucType;
+    public void setUcTypeO(String ucTypeO) {
+        this.ucTypeO = ucTypeO;
     }
 
-    public String getData() {
-        return data;
+    public String getDataO() {
+        return dataO;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDataO(String dataO) {
+        this.dataO = dataO;
     }
 
     @Override
     public String toString() {
         return "Office{" +
-                "ucPK='" + ucPK + '\'' +
-                ", ucUpdateTS='" + ucUpdateTS + '\'' +
-                ", ucVersion='" + ucVersion + '\'' +
-                ", ucRowType='" + ucRowType + '\'' +
-                ", ucType='" + ucType + '\'' +
-                ", data='" + data + '\'' +
+                "ucPKO='" + ucPKO + '\'' +
+                ", ucUpdateTSO='" + ucUpdateTSO + '\'' +
+                ", ucVersionO='" + ucVersionO + '\'' +
+                ", ucRowTypeO='" + ucRowTypeO + '\'' +
+                ", ucTypeO='" + ucTypeO + '\'' +
+                ", dataO='" + dataO + '\'' +
                 '}';
     }
 }

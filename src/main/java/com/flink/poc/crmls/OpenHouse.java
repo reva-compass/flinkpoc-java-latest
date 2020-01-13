@@ -2,80 +2,80 @@ package com.flink.poc.crmls;
 
 public class OpenHouse {
 
-    private String ucPK;
-    private String ucUpdateTS;
-    private String ucVersion;
-    private String ucRowType;
-    private String ucType;
-    private String listingKey;
-    private String data;
+    private String ucPKOH;
+    private String ucUpdateTSOH;
+    private String ucVersionOH;
+    private String ucRowTypeOH;
+    private String ucTypeOH;
+    private String listingKeyOH;
+    private String dataOH;
 
-    public String getUcPK() {
-        return ucPK;
+    public String getUcPKOH() {
+        return ucPKOH;
     }
 
-    public void setUcPK(String ucPK) {
-        this.ucPK = ucPK;
+    public void setUcPKOH(String ucPKOH) {
+        this.ucPKOH = ucPKOH;
     }
 
-    public String getUcUpdateTS() {
-        return ucUpdateTS;
+    public String getUcUpdateTSOH() {
+        return ucUpdateTSOH;
     }
 
-    public void setUcUpdateTS(String ucUpdateTS) {
-        this.ucUpdateTS = ucUpdateTS;
+    public void setUcUpdateTSOH(String ucUpdateTSOH) {
+        this.ucUpdateTSOH = ucUpdateTSOH;
     }
 
-    public String getUcVersion() {
-        return ucVersion;
+    public String getUcVersionOH() {
+        return ucVersionOH;
     }
 
-    public void setUcVersion(String ucVersion) {
-        this.ucVersion = ucVersion;
+    public void setUcVersionOH(String ucVersionOH) {
+        this.ucVersionOH = ucVersionOH;
     }
 
-    public String getUcRowType() {
-        return ucRowType;
+    public String getUcRowTypeOH() {
+        return ucRowTypeOH;
     }
 
-    public void setUcRowType(String ucRowType) {
-        this.ucRowType = ucRowType;
+    public void setUcRowTypeOH(String ucRowTypeOH) {
+        this.ucRowTypeOH = ucRowTypeOH;
     }
 
-    public String getUcType() {
-        return ucType;
+    public String getUcTypeOH() {
+        return ucTypeOH;
     }
 
-    public void setUcType(String ucType) {
-        this.ucType = ucType;
+    public void setUcTypeOH(String ucTypeOH) {
+        this.ucTypeOH = ucTypeOH;
     }
 
-    public String getListingKey() {
-        return listingKey;
+    public String getListingKeyOH() {
+        return listingKeyOH;
     }
 
-    public void setListingKey(String listingKey) {
-        this.listingKey = listingKey;
+    public void setListingKeyOH(String listingKeyOH) {
+        this.listingKeyOH = listingKeyOH;
     }
 
-    public String getData() {
-        return data;
+    public String getDataOH() {
+        return dataOH;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDataOH(String dataOH) {
+        this.dataOH = dataOH;
     }
 
     @Override
     public String toString() {
         return "OpenHouse{" +
-                "ucPK='" + ucPK + '\'' +
-                ", ucUpdateTS='" + ucUpdateTS + '\'' +
-                ", ucVersion='" + ucVersion + '\'' +
-                ", ucRowType='" + ucRowType + '\'' +
-                ", ucType='" + ucType + '\'' +
-                ", listingKey='" + listingKey + '\'' +
-                ", data='" + data + '\'' +
+                "ucPKOH='" + ucPKOH + '\'' +
+                ", ucUpdateTSOH='" + ucUpdateTSOH + '\'' +
+                ", ucVersionOH='" + ucVersionOH + '\'' +
+                ", ucRowTypeOH='" + ucRowTypeOH + '\'' +
+                ", ucTypeOH='" + ucTypeOH + '\'' +
+                ", listingKeyOH='" + listingKeyOH + '\'' +
+                ", dataOH='" + dataOH + '\'' +
                 '}';
     }
 }

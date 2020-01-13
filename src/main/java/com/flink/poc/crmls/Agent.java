@@ -2,70 +2,70 @@ package com.flink.poc.crmls;
 
 public class Agent {
 
-    private String ucPK;
-    private String ucUpdateTS;
-    private String ucVersion;
-    private String ucRowType;
-    private String ucType;
-    private String data;
+    private String ucPKA;
+    private String ucUpdateTSA;
+    private String ucVersionA;
+    private String ucRowTypeA;
+    private String ucTypeA;
+    private String dataA;
 
-    public String getUcPK() {
-        return ucPK;
+    public String getUcPKA() {
+        return ucPKA;
     }
 
-    public void setUcPK(String ucPK) {
-        this.ucPK = ucPK;
+    public void setUcPKA(String ucPKA) {
+        this.ucPKA = ucPKA;
     }
 
-    public String getUcUpdateTS() {
-        return ucUpdateTS;
+    public String getUcUpdateTSA() {
+        return ucUpdateTSA;
     }
 
-    public void setUcUpdateTS(String ucUpdateTS) {
-        this.ucUpdateTS = ucUpdateTS;
+    public void setUcUpdateTSA(String ucUpdateTSA) {
+        this.ucUpdateTSA = ucUpdateTSA;
     }
 
-    public String getUcVersion() {
-        return ucVersion;
+    public String getUcVersionA() {
+        return ucVersionA;
     }
 
-    public void setUcVersion(String ucVersion) {
-        this.ucVersion = ucVersion;
+    public void setUcVersionA(String ucVersionA) {
+        this.ucVersionA = ucVersionA;
     }
 
-    public String getUcRowType() {
-        return ucRowType;
+    public String getUcRowTypeA() {
+        return ucRowTypeA;
     }
 
-    public void setUcRowType(String ucRowType) {
-        this.ucRowType = ucRowType;
+    public void setUcRowTypeA(String ucRowTypeA) {
+        this.ucRowTypeA = ucRowTypeA;
     }
 
-    public String getUcType() {
-        return ucType;
+    public String getUcTypeA() {
+        return ucTypeA;
     }
 
-    public void setUcType(String ucType) {
-        this.ucType = ucType;
+    public void setUcTypeA(String ucTypeA) {
+        this.ucTypeA = ucTypeA;
     }
 
-    public String getData() {
-        return data;
+    public String getDataA() {
+        return dataA;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDataA(String dataA) {
+        this.dataA = dataA;
     }
 
     @Override
     public String toString() {
         return "Agent{" +
-                "ucPK='" + ucPK + '\'' +
-                ", ucUpdateTS='" + ucUpdateTS + '\'' +
-                ", ucVersion='" + ucVersion + '\'' +
-                ", ucRowType='" + ucRowType + '\'' +
-                ", ucType='" + ucType + '\'' +
-                ", data='" + data + '\'' +
+                "ucPKA='" + ucPKA + '\'' +
+                ", ucUpdateTSA='" + ucUpdateTSA + '\'' +
+                ", ucVersionA='" + ucVersionA + '\'' +
+                ", ucRowTypeA='" + ucRowTypeA + '\'' +
+                ", ucTypeA='" + ucTypeA + '\'' +
+                ", dataA='" + dataA + '\'' +
                 '}';
     }
 }

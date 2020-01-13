@@ -2,165 +2,154 @@ package com.flink.poc.crmls;
 
 public class Listing {
 
-    private String ucPK;
-    private String ucUpdateTS;
-    private String ucVersion;
-    private String ucRowType;
-    private String ucType;
-    private String listingKey;
-    private String listAgentKey;
-    private String buyerAgentKey;
-    private String coListAgentKey;
-    private String coBuyerAgentKey;
-    private String listOfficeKey;
-    private String buyerOfficeKey;
-    private String coListOfficeKey;
-    private String coBuyerOfficeKey;
-    private String data;
-    //private Long rowNum;
+    private String ucPKL;
+    private String ucUpdateTSL;
+    private String ucVersionL;
+    private String ucRowTypeL;
+    private String ucTypeL;
+    private String listAgentKeyL;
+    private String buyerAgentKeyL;
+    private String coListAgentKeyL;
+    private String coBuyerAgentKeyL;
+    private String listOfficeKeyL;
+    private String buyerOfficeKeyL;
+    private String coListOfficeKeyL;
+    private String coBuyerOfficeKeyL;
+    private String dataL;
 
     public Listing() {
 
     }
 
-    public String getData() {
-        return data;
+    public String getUcPKL() {
+        return ucPKL;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setUcPKL(String ucPKL) {
+        this.ucPKL = ucPKL;
     }
 
-    public String getUcPK() {
-        return ucPK;
+    public String getUcUpdateTSL() {
+        return ucUpdateTSL;
     }
 
-    public void setUcPK(String ucPK) {
-        this.ucPK = ucPK;
+    public void setUcUpdateTSL(String ucUpdateTSL) {
+        this.ucUpdateTSL = ucUpdateTSL;
     }
 
-    public String getUcUpdateTS() {
-        return ucUpdateTS;
+    public String getUcVersionL() {
+        return ucVersionL;
     }
 
-    public void setUcUpdateTS(String ucUpdateTS) {
-        this.ucUpdateTS = ucUpdateTS;
+    public void setUcVersionL(String ucVersionL) {
+        this.ucVersionL = ucVersionL;
     }
 
-    public String getUcVersion() {
-        return ucVersion;
+    public String getUcRowTypeL() {
+        return ucRowTypeL;
     }
 
-    public void setUcVersion(String ucVersion) {
-        this.ucVersion = ucVersion;
+    public void setUcRowTypeL(String ucRowTypeL) {
+        this.ucRowTypeL = ucRowTypeL;
     }
 
-    public String getUcRowType() {
-        return ucRowType;
+    public String getUcTypeL() {
+        return ucTypeL;
     }
 
-    public void setUcRowType(String ucRowType) {
-        this.ucRowType = ucRowType;
+    public void setUcTypeL(String ucTypeL) {
+        this.ucTypeL = ucTypeL;
     }
 
-    public String getUcType() {
-        return ucType;
+    public String getListAgentKeyL() {
+        return listAgentKeyL;
     }
 
-    public void setUcType(String ucType) {
-        this.ucType = ucType;
+    public void setListAgentKeyL(String listAgentKeyL) {
+        this.listAgentKeyL = listAgentKeyL;
     }
 
-    public String getListingKey() {
-        return listingKey;
+    public String getBuyerAgentKeyL() {
+        return buyerAgentKeyL;
     }
 
-    public void setListingKey(String listingKey) {
-        this.listingKey = listingKey;
+    public void setBuyerAgentKeyL(String buyerAgentKeyL) {
+        this.buyerAgentKeyL = buyerAgentKeyL;
     }
 
-    public String getListAgentKey() {
-        return listAgentKey;
+    public String getCoListAgentKeyL() {
+        return coListAgentKeyL;
     }
 
-    public void setListAgentKey(String listAgentKey) {
-        this.listAgentKey = listAgentKey;
+    public void setCoListAgentKeyL(String coListAgentKeyL) {
+        this.coListAgentKeyL = coListAgentKeyL;
     }
 
-    public String getBuyerAgentKey() {
-        return buyerAgentKey;
+    public String getCoBuyerAgentKeyL() {
+        return coBuyerAgentKeyL;
     }
 
-    public void setBuyerAgentKey(String buyerAgentKey) {
-        this.buyerAgentKey = buyerAgentKey;
+    public void setCoBuyerAgentKeyL(String coBuyerAgentKeyL) {
+        this.coBuyerAgentKeyL = coBuyerAgentKeyL;
     }
 
-    public String getCoListAgentKey() {
-        return coListAgentKey;
+    public String getListOfficeKeyL() {
+        return listOfficeKeyL;
     }
 
-    public void setCoListAgentKey(String coListAgentKey) {
-        this.coListAgentKey = coListAgentKey;
+    public void setListOfficeKeyL(String listOfficeKeyL) {
+        this.listOfficeKeyL = listOfficeKeyL;
     }
 
-    public String getCoBuyerAgentKey() {
-        return coBuyerAgentKey;
+    public String getBuyerOfficeKeyL() {
+        return buyerOfficeKeyL;
     }
 
-    public void setCoBuyerAgentKey(String coBuyerAgentKey) {
-        this.coBuyerAgentKey = coBuyerAgentKey;
+    public void setBuyerOfficeKeyL(String buyerOfficeKeyL) {
+        this.buyerOfficeKeyL = buyerOfficeKeyL;
     }
 
-    public String getListOfficeKey() {
-        return listOfficeKey;
+    public String getCoListOfficeKeyL() {
+        return coListOfficeKeyL;
     }
 
-    public void setListOfficeKey(String listOfficeKey) {
-        this.listOfficeKey = listOfficeKey;
+    public void setCoListOfficeKeyL(String coListOfficeKeyL) {
+        this.coListOfficeKeyL = coListOfficeKeyL;
     }
 
-    public String getBuyerOfficeKey() {
-        return buyerOfficeKey;
+    public String getCoBuyerOfficeKeyL() {
+        return coBuyerOfficeKeyL;
     }
 
-    public void setBuyerOfficeKey(String buyerOfficeKey) {
-        this.buyerOfficeKey = buyerOfficeKey;
+    public void setCoBuyerOfficeKeyL(String coBuyerOfficeKeyL) {
+        this.coBuyerOfficeKeyL = coBuyerOfficeKeyL;
     }
 
-    public String getCoListOfficeKey() {
-        return coListOfficeKey;
+    public String getDataL() {
+        return dataL;
     }
 
-    public void setCoListOfficeKey(String coListOfficeKey) {
-        this.coListOfficeKey = coListOfficeKey;
-    }
-
-    public String getCoBuyerOfficeKey() {
-        return coBuyerOfficeKey;
-    }
-
-    public void setCoBuyerOfficeKey(String coBuyerOfficeKey) {
-        this.coBuyerOfficeKey = coBuyerOfficeKey;
+    public void setDataL(String dataL) {
+        this.dataL = dataL;
     }
 
     @Override
     public String toString() {
         return "Listing{" +
-                "ucPK='" + ucPK + '\'' +
-                ", ucUpdateTS='" + ucUpdateTS + '\'' +
-                ", ucVersion='" + ucVersion + '\'' +
-                ", ucRowType='" + ucRowType + '\'' +
-                ", ucType='" + ucType + '\'' +
-                ", listingKey='" + listingKey + '\'' +
-                ", listAgentKey='" + listAgentKey + '\'' +
-                ", buyerAgentKey='" + buyerAgentKey + '\'' +
-                ", coListAgentKey='" + coListAgentKey + '\'' +
-                ", coBuyerAgentKey='" + coBuyerAgentKey + '\'' +
-                ", listOfficeKey='" + listOfficeKey + '\'' +
-                ", buyerOfficeKey='" + buyerOfficeKey + '\'' +
-                ", coListOfficeKey='" + coListOfficeKey + '\'' +
-                ", coBuyerOfficeKey='" + coBuyerOfficeKey + '\'' +
-                ", data='" + data + '\'' +
+                "ucPKL='" + ucPKL + '\'' +
+                ", ucUpdateTSL='" + ucUpdateTSL + '\'' +
+                ", ucVersionL='" + ucVersionL + '\'' +
+                ", ucRowTypeL='" + ucRowTypeL + '\'' +
+                ", ucTypeL='" + ucTypeL + '\'' +
+                ", listAgentKeyL='" + listAgentKeyL + '\'' +
+                ", buyerAgentKeyL='" + buyerAgentKeyL + '\'' +
+                ", coListAgentKeyL='" + coListAgentKeyL + '\'' +
+                ", coBuyerAgentKeyL='" + coBuyerAgentKeyL + '\'' +
+                ", listOfficeKeyL='" + listOfficeKeyL + '\'' +
+                ", buyerOfficeKeyL='" + buyerOfficeKeyL + '\'' +
+                ", coListOfficeKeyL='" + coListOfficeKeyL + '\'' +
+                ", coBuyerOfficeKeyL='" + coBuyerOfficeKeyL + '\'' +
+                ", dataL='" + dataL + '\'' +
                 '}';
     }
 }
