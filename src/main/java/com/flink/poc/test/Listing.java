@@ -4,181 +4,164 @@ import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
 
 public class Listing {
 
-    private String listingId;
-    private String earnestPayableTo;
-    private String statusChangeDate;
-    private String inclusions;
-    private String county;
-    private String agentId;
-    private String termsOffered;
-    private String nbrOfAcres;
-    private String coListingMemberUrl;
-    private String coListAgentId;
-    private String buyerAgentId;
-    private String coBuyerAgentId;
-    private String listOfficeBoardCode;
-    private String list207;
-    private Long rowNum;
+    private String listingIdL;
+    private String agentIdL;
+    private String buyerAgentIdL;
+    private String coListAgentIdL;
+    private String coBuyerAgentIdL;
+    private String earnestPayableToL;
+    private String statusChangeDateL;
+    private String inclusionsL;
+    private String countyL;
+    private String termsOfferedL;
+    private String nbrOfAcresL;
+    private String coListingMemberUrlL;
+    private String listOfficeBoardCodeL;
+    private String list207L;
+    private Long rowNumL;
 
     public Listing() {
 
     }
 
-//    public Listing(JsonNode jsonNode) {
-//        System.out.println("## # listingid " + jsonNode.get("Listing ID").textValue());
-//        listingId = jsonNode.get("Listing ID").textValue();
-//        earnestPayableTo = jsonNode.get("Earnest $ Payable To").textValue();
-//        statusChangeDate = jsonNode.get("Status Change Date").textValue();
-//        inclusions = jsonNode.get("Inclusions").textValue();
-//        county = jsonNode.get("County").textValue();
-//        agentId = jsonNode.get("Agent ID").textValue();
-//        termsOffered = jsonNode.get("Terms Offered").textValue();
-//        nbrOfAcres = jsonNode.get("Nbr of Acres").textValue();
-//        coListingMemberUrl = jsonNode.get("CoListingMemberUrl").textValue();
-//        coListAgentId = jsonNode.get("CoList Agent ID").textValue();
-//        listOfficeBoardCode = jsonNode.get("List Office Board Code").textValue();
-//        list207 = jsonNode.get("LIST_207").textValue();
-//    }
-
-
-    public String getListingId() {
-        return listingId;
+    public String getListingIdL() {
+        return listingIdL;
     }
 
-    public void setListingId(String listingId) {
-        this.listingId = listingId;
+    public void setListingIdL(String listingIdL) {
+        this.listingIdL = listingIdL;
     }
 
-    public String getEarnestPayableTo() {
-        return earnestPayableTo;
+    public String getAgentIdL() {
+        return agentIdL;
     }
 
-    public void setEarnestPayableTo(String earnestPayableTo) {
-        this.earnestPayableTo = earnestPayableTo;
+    public void setAgentIdL(String agentIdL) {
+        this.agentIdL = agentIdL;
     }
 
-    public String getStatusChangeDate() {
-        return statusChangeDate;
+    public String getBuyerAgentIdL() {
+        return buyerAgentIdL;
     }
 
-    public void setStatusChangeDate(String statusChangeDate) {
-        this.statusChangeDate = statusChangeDate;
+    public void setBuyerAgentIdL(String buyerAgentIdL) {
+        this.buyerAgentIdL = buyerAgentIdL;
     }
 
-    public String getInclusions() {
-        return inclusions;
+    public String getCoListAgentIdL() {
+        return coListAgentIdL;
     }
 
-    public void setInclusions(String inclusions) {
-        this.inclusions = inclusions;
+    public void setCoListAgentIdL(String coListAgentIdL) {
+        this.coListAgentIdL = coListAgentIdL;
     }
 
-    public String getCounty() {
-        return county;
+    public String getCoBuyerAgentIdL() {
+        return coBuyerAgentIdL;
     }
 
-    public void setCounty(String county) {
-        this.county = county;
+    public void setCoBuyerAgentIdL(String coBuyerAgentIdL) {
+        this.coBuyerAgentIdL = coBuyerAgentIdL;
     }
 
-    public String getAgentId() {
-        return agentId;
+    public String getEarnestPayableToL() {
+        return earnestPayableToL;
     }
 
-    public void setAgentId(String agentId) {
-        this.agentId = agentId;
+    public void setEarnestPayableToL(String earnestPayableToL) {
+        this.earnestPayableToL = earnestPayableToL;
     }
 
-    public String getTermsOffered() {
-        return termsOffered;
+    public String getStatusChangeDateL() {
+        return statusChangeDateL;
     }
 
-    public void setTermsOffered(String termsOffered) {
-        this.termsOffered = termsOffered;
+    public void setStatusChangeDateL(String statusChangeDateL) {
+        this.statusChangeDateL = statusChangeDateL;
     }
 
-    public String getNbrOfAcres() {
-        return nbrOfAcres;
+    public String getInclusionsL() {
+        return inclusionsL;
     }
 
-    public void setNbrOfAcres(String nbrOfAcres) {
-        this.nbrOfAcres = nbrOfAcres;
+    public void setInclusionsL(String inclusionsL) {
+        this.inclusionsL = inclusionsL;
     }
 
-    public String getCoListingMemberUrl() {
-        return coListingMemberUrl;
+    public String getCountyL() {
+        return countyL;
     }
 
-    public void setCoListingMemberUrl(String coListingMemberUrl) {
-        this.coListingMemberUrl = coListingMemberUrl;
+    public void setCountyL(String countyL) {
+        this.countyL = countyL;
     }
 
-    public String getCoListAgentId() {
-        return coListAgentId;
+    public String getTermsOfferedL() {
+        return termsOfferedL;
     }
 
-    public void setCoListAgentId(String coListAgentId) {
-        this.coListAgentId = coListAgentId;
+    public void setTermsOfferedL(String termsOfferedL) {
+        this.termsOfferedL = termsOfferedL;
     }
 
-    public String getBuyerAgentId() {
-        return buyerAgentId;
+    public String getNbrOfAcresL() {
+        return nbrOfAcresL;
     }
 
-    public void setBuyerAgentId(String buyerAgentId) {
-        this.buyerAgentId = buyerAgentId;
+    public void setNbrOfAcresL(String nbrOfAcresL) {
+        this.nbrOfAcresL = nbrOfAcresL;
     }
 
-    public String getCoBuyerAgentId() {
-        return coBuyerAgentId;
+    public String getCoListingMemberUrlL() {
+        return coListingMemberUrlL;
     }
 
-    public void setCoBuyerAgentId(String coBuyerAgentId) {
-        this.coBuyerAgentId = coBuyerAgentId;
+    public void setCoListingMemberUrlL(String coListingMemberUrlL) {
+        this.coListingMemberUrlL = coListingMemberUrlL;
     }
 
-    public String getListOfficeBoardCode() {
-        return listOfficeBoardCode;
+    public String getListOfficeBoardCodeL() {
+        return listOfficeBoardCodeL;
     }
 
-    public void setListOfficeBoardCode(String listOfficeBoardCode) {
-        this.listOfficeBoardCode = listOfficeBoardCode;
+    public void setListOfficeBoardCodeL(String listOfficeBoardCodeL) {
+        this.listOfficeBoardCodeL = listOfficeBoardCodeL;
     }
 
-    public String getList207() {
-        return list207;
+    public String getList207L() {
+        return list207L;
     }
 
-    public void setList207(String list207) {
-        this.list207 = list207;
+    public void setList207L(String list207L) {
+        this.list207L = list207L;
     }
 
-    public Long getRowNum() {
-        return rowNum;
+    public Long getRowNumL() {
+        return rowNumL;
     }
 
-    public void setRowNum(Long rowNum) {
-        this.rowNum = rowNum;
+    public void setRowNumL(Long rowNumL) {
+        this.rowNumL = rowNumL;
     }
 
     @Override
     public String toString() {
         return "Listing{" +
-                "listingId='" + listingId + '\'' +
-                ", earnestPayableTo='" + earnestPayableTo + '\'' +
-                ", statusChangeDate='" + statusChangeDate + '\'' +
-                ", inclusions='" + inclusions + '\'' +
-                ", county='" + county + '\'' +
-                ", agentId='" + agentId + '\'' +
-                ", termsOffered='" + termsOffered + '\'' +
-                ", nbrOfAcres='" + nbrOfAcres + '\'' +
-                ", coListingMemberUrl='" + coListingMemberUrl + '\'' +
-                ", coListAgentId='" + coListAgentId + '\'' +
-                ", buyerAgentId='" + buyerAgentId + '\'' +
-                ", coBuyerAgentId='" + coBuyerAgentId + '\'' +
-                ", listOfficeBoardCode='" + listOfficeBoardCode + '\'' +
-                ", list207='" + list207 + '\'' +
-                ", rowNum=" + rowNum +
+                "listingIdL='" + listingIdL + '\'' +
+                ", agentIdL='" + agentIdL + '\'' +
+                ", buyerAgentIdL='" + buyerAgentIdL + '\'' +
+                ", coListAgentIdL='" + coListAgentIdL + '\'' +
+                ", coBuyerAgentIdL='" + coBuyerAgentIdL + '\'' +
+                ", earnestPayableToL='" + earnestPayableToL + '\'' +
+                ", statusChangeDateL='" + statusChangeDateL + '\'' +
+                ", inclusionsL='" + inclusionsL + '\'' +
+                ", countyL='" + countyL + '\'' +
+                ", termsOfferedL='" + termsOfferedL + '\'' +
+                ", nbrOfAcresL='" + nbrOfAcresL + '\'' +
+                ", coListingMemberUrlL='" + coListingMemberUrlL + '\'' +
+                ", listOfficeBoardCodeL='" + listOfficeBoardCodeL + '\'' +
+                ", list207L='" + list207L + '\'' +
+                ", rowNumL=" + rowNumL +
                 '}';
     }
 }
