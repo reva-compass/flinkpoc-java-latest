@@ -16,6 +16,7 @@ import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 
 import java.util.Properties;
+import java.util.Random;
 
 
 public class CrmlsJoiner {
@@ -43,6 +44,7 @@ public class CrmlsJoiner {
     private static ObjectMapper mapper = new ObjectMapper();
     private static FlinkKafkaProducer<Tuple2<Boolean, Row>> kafkaProducer =
             new FlinkKafkaProducer("test-topic", new JoinedSerializer("test-topic"), setProps(), FlinkKafkaProducer.Semantic.AT_LEAST_ONCE);
+    private static Random rnd = new Random();
 
     /* TOPICS */
     private static String listingsTopic = "la_crmls_rets-listings-p";
@@ -55,6 +57,8 @@ public class CrmlsJoiner {
     private static String agentsConsumerGroup = "";
     private static String officesConsumerGroup = "";
     private static String openHousesConsumerGroup = "";
+
+    private static String COMPASS_NULL = "-COMPASS-NULL";
 
     private static Properties setProps() {
 
@@ -89,22 +93,60 @@ public class CrmlsJoiner {
             listing.setData(dataStr);
             if (dataNode.has("ListingKeyNumeric"))
                 listing.setListingKey(dataNode.get("ListingKeyNumeric").textValue());
-            if (dataNode.has("ListAgentKeyNumeric"))
+
+            if (dataNode.has("ListAgentKeyNumeric")) {
                 listing.setListAgentKey(dataNode.get("ListAgentKeyNumeric").textValue());
-            if (dataNode.has("BuyerAgentKeyNumeric"))
+            } else {
+                Integer x = 100000 + rnd.nextInt(900000);
+                listing.setListAgentKey(x + COMPASS_NULL);
+            }
+            if (dataNode.has("BuyerAgentKeyNumeric")) {
                 listing.setBuyerAgentKey(dataNode.get("BuyerAgentKeyNumeric").textValue());
-            if (dataNode.has("CoListAgentKeyNumeric"))
+            } else {
+                Integer x = 100000 + rnd.nextInt(900000);
+                listing.setBuyerAgentKey(x + COMPASS_NULL);
+            }
+
+            if (dataNode.has("CoListAgentKeyNumeric")) {
                 listing.setCoListAgentKey(dataNode.get("CoListAgentKeyNumeric").textValue());
-            if (dataNode.has("CoBuyerAgentKeyNumeric"))
+            } else {
+                Integer x = 100000 + rnd.nextInt(900000);
+                listing.setCoListAgentKey(x + COMPASS_NULL);
+            }
+
+            if (dataNode.has("CoBuyerAgentKeyNumeric")) {
                 listing.setCoBuyerAgentKey(dataNode.get("CoBuyerAgentKeyNumeric").textValue());
-            if (dataNode.has("ListOfficeKeyNumeric"))
+            } else {
+                Integer x = 100000 + rnd.nextInt(900000);
+                listing.setCoBuyerAgentKey(x + COMPASS_NULL);
+            }
+
+            if (dataNode.has("ListOfficeKeyNumeric")) {
                 listing.setListOfficeKey(dataNode.get("ListOfficeKeyNumeric").textValue());
-            if (dataNode.has("BuyerOfficeKeyNumeric"))
+            } else {
+                Integer x = 100000 + rnd.nextInt(900000);
+                listing.setListOfficeKey(x + COMPASS_NULL);
+            }
+            if (dataNode.has("BuyerOfficeKeyNumeric")) {
                 listing.setBuyerOfficeKey(dataNode.get("BuyerOfficeKeyNumeric").textValue());
-            if (dataNode.has("CoListOfficeKeyNumeric"))
+            } else {
+                Integer x = 100000 + rnd.nextInt(900000);
+                listing.setBuyerOfficeKey(x + COMPASS_NULL);
+            }
+
+            if (dataNode.has("CoListOfficeKeyNumeric")) {
                 listing.setCoListOfficeKey(dataNode.get("CoListOfficeKeyNumeric").textValue());
-            if (dataNode.has("CoBuyerOfficeKeyNumeric"))
+            } else {
+                Integer x = 100000 + rnd.nextInt(900000);
+                listing.setCoListOfficeKey(x + COMPASS_NULL);
+            }
+
+            if (dataNode.has("CoBuyerOfficeKeyNumeric")) {
                 listing.setCoBuyerOfficeKey(dataNode.get("CoBuyerOfficeKeyNumeric").textValue());
+            } else {
+                Integer x = 100000 + rnd.nextInt(900000);
+                listing.setCoBuyerOfficeKey(x + COMPASS_NULL);
+            }
             //  System.out.println("### list obj " + listing);
             return listing;
         }).name("Source: Listings");
