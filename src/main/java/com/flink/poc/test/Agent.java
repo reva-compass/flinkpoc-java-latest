@@ -2,95 +2,94 @@ package com.flink.poc.test;
 
 public class Agent {
 
-    private String agentId;
-    private String city;
-    private String officeId;
-    private String email;
-    private String renegotiationExp;
-    private String nrdsid;
-    private String mlsStatus;
-    private String agentTimestamp;
+    private String agentIdA;
+    private String cityA;
+    private String officeIdA;
+    private String emailA;
+    private String renegotiationExpA;
+    private String nrdsidA;
+    private String mlsStatusA;
+    private String agentTimestampA;
 
     public Agent() {
 
     }
 
-    public String getAgentId() {
-        return agentId;
+    public String getAgentIdA() {
+        return agentIdA;
     }
 
-    public void setAgentId(String agentId) {
-        this.agentId = agentId;
+    public void setAgentIdA(String agentIdA) {
+        this.agentIdA = agentIdA;
     }
 
-    public String getCity() {
-        return city;
+    public String getCityA() {
+        return cityA;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityA(String cityA) {
+        this.cityA = cityA;
     }
 
-    public String getOfficeId() {
-        return officeId;
+    public String getOfficeIdA() {
+        return officeIdA;
     }
 
-    public void setOfficeId(String officeId) {
-        this.officeId = officeId;
+    public void setOfficeIdA(String officeIdA) {
+        this.officeIdA = officeIdA;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailA() {
+        return emailA;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailA(String emailA) {
+        this.emailA = emailA;
     }
 
-    public String getRenegotiationExp() {
-        return renegotiationExp;
+    public String getRenegotiationExpA() {
+        return renegotiationExpA;
     }
 
-    public void setRenegotiationExp(String renegotiationExp) {
-        this.renegotiationExp = renegotiationExp;
+    public void setRenegotiationExpA(String renegotiationExpA) {
+        this.renegotiationExpA = renegotiationExpA;
     }
 
-    public String getNrdsid() {
-        return nrdsid;
+    public String getNrdsidA() {
+        return nrdsidA;
     }
 
-    public void setNrdsid(String nrdsid) {
-        this.nrdsid = nrdsid;
+    public void setNrdsidA(String nrdsidA) {
+        this.nrdsidA = nrdsidA;
     }
 
-    public String getMlsStatus() {
-        return mlsStatus;
+    public String getMlsStatusA() {
+        return mlsStatusA;
     }
 
-    public void setMlsStatus(String mlsStatus) {
-        this.mlsStatus = mlsStatus;
+    public void setMlsStatusA(String mlsStatusA) {
+        this.mlsStatusA = mlsStatusA;
     }
 
-    public String getAgentTimestamp() {
-        return agentTimestamp;
+    public String getAgentTimestampA() {
+        return agentTimestampA;
     }
 
-    public void setAgentTimestamp(String agentTimestamp) {
-        this.agentTimestamp = agentTimestamp;
+    public void setAgentTimestampA(String agentTimestampA) {
+        this.agentTimestampA = agentTimestampA;
     }
 
     @Override
     public String toString() {
         return "Agent{" +
-                "agentId='" + agentId + '\'' +
-                ", city='" + city + '\'' +
-                ", officeId='" + officeId + '\'' +
-                ", email='" + email + '\'' +
-                ", renegotiationExp='" + renegotiationExp + '\'' +
-                ", nrdsid='" + nrdsid + '\'' +
-                ", mlsStatus='" + mlsStatus + '\'' +
-                ", timestamp='" + agentTimestamp + '\'' +
+                "agentIdA='" + agentIdA + '\'' +
+                ", cityA='" + cityA + '\'' +
+                ", officeIdA='" + officeIdA + '\'' +
+                ", emailA='" + emailA + '\'' +
+                ", renegotiationExpA='" + renegotiationExpA + '\'' +
+                ", nrdsidA='" + nrdsidA + '\'' +
+                ", mlsStatusA='" + mlsStatusA + '\'' +
+                ", agentTimestampA='" + agentTimestampA + '\'' +
                 '}';
     }
-
 }
