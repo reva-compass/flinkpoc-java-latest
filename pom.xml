@@ -105,7 +105,7 @@
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.flink.poc.test.TestBlink</mainClass>
+                                    <mainClass>com.flink.poc.crmls.CrmlsJoiner</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
