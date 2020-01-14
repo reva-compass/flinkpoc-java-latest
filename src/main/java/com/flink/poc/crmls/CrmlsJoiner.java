@@ -16,7 +16,6 @@ import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 
 import java.util.Properties;
-import java.util.Random;
 
 
 public class CrmlsJoiner {
@@ -44,7 +43,7 @@ public class CrmlsJoiner {
     private static ObjectMapper mapper = new ObjectMapper();
     private static FlinkKafkaProducer<Tuple2<Boolean, Row>> kafkaProducer =
             new FlinkKafkaProducer("test-topic", new JoinedSerializer("test-topic"), setProps(), FlinkKafkaProducer.Semantic.AT_LEAST_ONCE);
-    private static Random rnd = new Random();
+    //  private static Random rnd = new Random();
 
     /* TOPICS */
     private static String listingsTopic = "la_crmls_rets-listings-p";
@@ -94,57 +93,65 @@ public class CrmlsJoiner {
 
             if (dataNode.has("ListAgentKeyNumeric")) {
                 listing.setListAgentKeyL(dataNode.get("ListAgentKeyNumeric").textValue());
-            } else {
-                Integer x = 100000 + rnd.nextInt(900000);
-                listing.setListAgentKeyL(x + COMPASS_NULL);
             }
+//            else {
+//                Integer x = 100000 + rnd.nextInt(900000);
+//                listing.setListAgentKeyL(x + COMPASS_NULL);
+//            }
             if (dataNode.has("BuyerAgentKeyNumeric")) {
                 listing.setBuyerAgentKeyL(dataNode.get("BuyerAgentKeyNumeric").textValue());
-            } else {
-                Integer x = 100000 + rnd.nextInt(900000);
-                listing.setBuyerAgentKeyL(x + COMPASS_NULL);
             }
+//            else {
+//                Integer x = 100000 + rnd.nextInt(900000);
+//                listing.setBuyerAgentKeyL(x + COMPASS_NULL);
+//            }
 
             if (dataNode.has("CoListAgentKeyNumeric")) {
                 listing.setCoListAgentKeyL(dataNode.get("CoListAgentKeyNumeric").textValue());
-            } else {
-                Integer x = 100000 + rnd.nextInt(900000);
-                listing.setCoListAgentKeyL(x + COMPASS_NULL);
             }
+//            else {
+//                Integer x = 100000 + rnd.nextInt(900000);
+//                listing.setCoListAgentKeyL(x + COMPASS_NULL);
+//            }
 
             if (dataNode.has("CoBuyerAgentKeyNumeric")) {
                 listing.setCoBuyerAgentKeyL(dataNode.get("CoBuyerAgentKeyNumeric").textValue());
-            } else {
-                Integer x = 100000 + rnd.nextInt(900000);
-                listing.setCoBuyerAgentKeyL(x + COMPASS_NULL);
             }
+//            else {
+//                Integer x = 100000 + rnd.nextInt(900000);
+//                listing.setCoBuyerAgentKeyL(x + COMPASS_NULL);
+//            }
 
             if (dataNode.has("ListOfficeKeyNumeric")) {
                 listing.setListOfficeKeyL(dataNode.get("ListOfficeKeyNumeric").textValue());
-            } else {
-                Integer x = 100000 + rnd.nextInt(900000);
-                listing.setListOfficeKeyL(x + COMPASS_NULL);
             }
+//            else {
+//                Integer x = 100000 + rnd.nextInt(900000);
+//                listing.setListOfficeKeyL(x + COMPASS_NULL);
+//            }
             if (dataNode.has("BuyerOfficeKeyNumeric")) {
                 listing.setBuyerOfficeKeyL(dataNode.get("BuyerOfficeKeyNumeric").textValue());
-            } else {
-                Integer x = 100000 + rnd.nextInt(900000);
-                listing.setBuyerOfficeKeyL(x + COMPASS_NULL);
             }
+//            else {
+//                Integer x = 100000 + rnd.nextInt(900000);
+//                listing.setBuyerOfficeKeyL(x + COMPASS_NULL);
+//            }
 
             if (dataNode.has("CoListOfficeKeyNumeric")) {
                 listing.setCoListOfficeKeyL(dataNode.get("CoListOfficeKeyNumeric").textValue());
-            } else {
-                Integer x = 100000 + rnd.nextInt(900000);
-                listing.setCoListOfficeKeyL(x + COMPASS_NULL);
             }
+//            else {
+//                Integer x = 100000 + rnd.nextInt(900000);
+//                listing.setCoListOfficeKeyL(x + COMPASS_NULL);
+//            }
 
             if (dataNode.has("CoBuyerOfficeKeyNumeric")) {
                 listing.setCoBuyerOfficeKeyL(dataNode.get("CoBuyerOfficeKeyNumeric").textValue());
-            } else {
-                Integer x = 100000 + rnd.nextInt(900000);
-                listing.setCoBuyerOfficeKeyL(x + COMPASS_NULL);
             }
+//            else {
+//                Integer x = 100000 + rnd.nextInt(900000);
+//                listing.setCoBuyerOfficeKeyL(x + COMPASS_NULL);
+//            }
             //  System.out.println("### list obj " + listing);
             return listing;
         }).name("Source: Listings");
@@ -340,14 +347,14 @@ public class CrmlsJoiner {
          */
         Table joinedTbl = bsTableEnv.sqlQuery(
                 "SELECT * FROM latestListings l " +
-                        "LEFT JOIN latestAgents aa ON l.listAgentKeyL = aa.ucPKA " +
-                        "LEFT JOIN latestAgents ab ON l.buyerAgentKeyL = ab.ucPKA " +
-                        "LEFT JOIN latestAgents ac ON l.coListAgentKeyL = ac.ucPKA " +
-                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentKeyL = ad.ucPKA " +
-                        "LEFT JOIN latestOffices oa ON l.listOfficeKeyL = oa.ucPKO " +
-                        "LEFT JOIN latestOffices ob ON l.buyerOfficeKeyL = ob.ucPKO " +
-                        "LEFT JOIN latestOffices oc ON l.coListOfficeKeyL = oc.ucPKO " +
-                        "LEFT JOIN latestOffices od ON l.coBuyerOfficeKeyL = od.ucPKO " +
+                        "LEFT JOIN latestAgents aa ON l.listAgentKeyL = aa.ucPKA AND l.listAgentKeyL IS NOT NULL " +
+                        "LEFT JOIN latestAgents ab ON l.buyerAgentKeyL = ab.ucPKA AND l.buyerAgentKeyL IS NOT NULL " +
+                        "LEFT JOIN latestAgents ac ON l.coListAgentKeyL = ac.ucPKA AND l.coListAgentKeyL IS NOT NULL " +
+                        "LEFT JOIN latestAgents ad ON l.coBuyerAgentKeyL = ad.ucPKA AND l.coBuyerAgentKeyL IS NOT NULL " +
+                        "LEFT JOIN latestOffices oa ON l.listOfficeKeyL = oa.ucPKO AND l.listOfficeKeyL IS NOT NULL " +
+                        "LEFT JOIN latestOffices ob ON l.buyerOfficeKeyL = ob.ucPKO AND l.buyerOfficeKeyL IS NOT NULL " +
+                        "LEFT JOIN latestOffices oc ON l.coListOfficeKeyL = oc.ucPKO AND l.coListOfficeKeyL IS NOT NULL " +
+                        "LEFT JOIN latestOffices od ON l.coBuyerOfficeKeyL = od.ucPKO AND l.coBuyerOfficeKeyL IS NOT NULL " +
                         "LEFT JOIN latestOpenHouses oh ON l.ucPKL = oh.listingKeyOH"
         );
         //       bsTableEnv.toRetractStream(joinedTbl, Row.class).print();
