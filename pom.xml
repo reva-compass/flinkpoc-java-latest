@@ -67,7 +67,19 @@
         <version>1.9.1</version>
         <scope>provided</scope>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.avro/avro -->
+    <dependency>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro</artifactId>
+        <version>1.9.1</version>
+    </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>2.10.1</version>
+    </dependency>
 </dependencies>
 
 
@@ -105,7 +117,7 @@
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.flink.poc.crmls.CrmlsJoiner</mainClass>
+                                    <mainClass>com.flink.poc.seattle.SeattleJoiner</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
