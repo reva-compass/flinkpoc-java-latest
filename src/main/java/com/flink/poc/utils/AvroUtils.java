@@ -9,6 +9,7 @@ import org.apache.avro.io.DecoderFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 
 public class AvroUtils {
@@ -25,12 +26,14 @@ public class AvroUtils {
 
     public static GenericRecord deSerializeEnvelope(byte[] data) throws IOException {
         File schemaFile = new File("/Users/rkandoji/Documents/GitProjects/kafka-beginner/src/main/resources/kafka_envelope.avsc");
+        // File schemaFile = getFileFromResources("kafka_envelope.avsc");
         Schema schema = new Schema.Parser().parse(schemaFile);
         return deSerialize(data, schema);
     }
 
     public static GenericRecord deSerializePipelineMessage(byte[] data) throws IOException {
         File schemaFile = new File("/Users/rkandoji/Documents/GitProjects/kafka-beginner/src/main/resources/pipeline_message_v1.avsc");
+        //   File schemaFile = getFileFromResources("pipeline_message_v1.avsc");
         Schema schema = new Schema.Parser().parse(schemaFile);
         return deSerialize(data, schema);
     }
@@ -41,5 +44,20 @@ public class AvroUtils {
         GenericRecord result = reader.read(null, decoder);
         return result;
     }
+
+    private static File getFileFromResources(String fileName) {
+
+        ClassLoader classLoader = AvroUtils.class.getClassLoader();
+
+
+        URL resource = classLoader.getResource(fileName);
+        if (resource == null) {
+            throw new IllegalArgumentException("file is not found!");
+        } else {
+            return new File(resource.getFile());
+        }
+
+    }
+
 
 }

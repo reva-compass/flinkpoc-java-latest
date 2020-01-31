@@ -1,4 +1,4 @@
-package com.flink.poc.seattle;
+package com.flink.poc.seattle.entity;
 
 public class Office {
 

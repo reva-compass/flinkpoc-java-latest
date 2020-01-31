@@ -1,6 +1,6 @@
-package com.flink.poc.seattle;
+package com.flink.poc.seattle.entity;
 
-public class Listing {
+public class Condominium {
 
     // LISTING_PRIMARY_KEY = 'LN'
     private String pkL;
@@ -98,9 +98,9 @@ public class Listing {
 
     @Override
     public String toString() {
-        return "Listing{" +
-                "pk='" + pkL + '\'' +
-                ", LAG='" + listingAgent + '\'' +
+        return "Condominium{" +
+                "pkL='" + pkL + '\'' +
+                ", listingAgent='" + listingAgent + '\'' +
                 ", CLA='" + CLA + '\'' +
                 ", SAG='" + SAG + '\'' +
                 ", SCA='" + SCA + '\'' +

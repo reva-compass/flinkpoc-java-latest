@@ -1,6 +1,11 @@
 package com.flink.poc.seattle;
 
 import com.flink.poc.crmls.JoinedSerializer;
+import com.flink.poc.seattle.entity.Agent;
+import com.flink.poc.seattle.entity.Listing;
+import com.flink.poc.seattle.entity.Office;
+import com.flink.poc.seattle.entity.OpenHouse;
+import com.flink.poc.seattle.utils.Entity;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.AbstractDeserializationSchema;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -46,13 +51,6 @@ public class SeattleJoiner {
             new FlinkKafkaProducer("test-topic", new JoinedSerializer("test-topic"), setProps(), FlinkKafkaProducer.Semantic.AT_LEAST_ONCE);
     private static Random rnd = new Random();
 
-    /*
-data_listings_mirrored_seattle_nwmls_farmranch
-data_listings_mirrored_seattle_nwmls_manufactured
-data_listings_mirrored_seattle_nwmls_multifamily
-data_listings_mirrored_seattle_nwmls_rental
-data_listings_mirrored_seattle_nwmls_school
-     */
     /* TOPICS */
     private static String condosTopic = "data_listings_mirrored_seattle_nwmls_condominium";
     private static String vacantLandTopic = "data_listings_mirrored_seattle_nwmls_vacantland";
@@ -85,6 +83,7 @@ data_listings_mirrored_seattle_nwmls_school
         properties.setProperty("bootstrap.servers", "b-2.listings-infra-dev-191.lguuvv.c6.kafka.us-east-1.amazonaws.com:9092," +
                 "b-1.listings-infra-dev-191.lguuvv.c6.kafka.us-east-1.amazonaws.com:9092," +
                 "b-3.listings-infra-dev-191.lguuvv.c6.kafka.us-east-1.amazonaws.com:9092");
+      //  properties.put("enable.auto.commit", "false");
         return properties;
     }
 
@@ -215,7 +214,7 @@ data_listings_mirrored_seattle_nwmls_school
          * CONDOS
          */
         Table latestCondosTbl = processListings(condosTopic, condosConsumerGroup, "Condos");
-        bsTableEnv.registerTable("latestCondos", latestCondosTbl);
+//        bsTableEnv.registerTable("latestCondos", latestCondosTbl);
 //        Table condosRes = bsTableEnv.sqlQuery("SELECT * FROM latestCondos");
 //        bsTableEnv.toRetractStream(condosRes, Row.class).print();
 
@@ -223,7 +222,7 @@ data_listings_mirrored_seattle_nwmls_school
          * VACANT LAND
          */
         Table latestVacantLandTbl = processListings(vacantLandTopic, vacantLandConsumerGroup, "VacantLand");
-        bsTableEnv.registerTable("latestVacantLand", latestVacantLandTbl);
+//        bsTableEnv.registerTable("latestVacantLand", latestVacantLandTbl);
 //        Table vlRes = bsTableEnv.sqlQuery("SELECT * FROM latestVacantLand");
 //        bsTableEnv.toRetractStream(vlRes, Row.class).print();
 
@@ -231,14 +230,14 @@ data_listings_mirrored_seattle_nwmls_school
          * RESIDENTIAL
          */
         Table latestResidentialTbl = processListings(residentialTopic, residentialConsumerGroup, "Residential");
-        bsTableEnv.registerTable("latestResidential", latestResidentialTbl);
+//        bsTableEnv.registerTable("latestResidential", latestResidentialTbl);
 //        Table resnRes = bsTableEnv.sqlQuery("SELECT * FROM latestResidential");
 //        bsTableEnv.toRetractStream(resnRes, Row.class).print();
 
         /**
          * farmranch
          */
-//        Table latestFarmranchTbl = processListings(farmranchTopic, farmranchConsumerGroup, "Farmranch");
+        Table latestFarmranchTbl = processListings(farmranchTopic, farmranchConsumerGroup, "Farmranch");
 //        bsTableEnv.registerTable("latestFarmranch", latestFarmranchTbl);
 //        Table farmRes = bsTableEnv.sqlQuery("SELECT * FROM latestFarmranch");
 //        bsTableEnv.toRetractStream(farmRes, Row.class).print();
@@ -246,7 +245,7 @@ data_listings_mirrored_seattle_nwmls_school
         /**
          * manufactured
          */
-//        Table latestManufacturedTbl = processListings(manufacturedTopic, manufacturedConsumerGroup, "Manufactured");
+        Table latestManufacturedTbl = processListings(manufacturedTopic, manufacturedConsumerGroup, "Manufactured");
 //        bsTableEnv.registerTable("latestManufactured", latestManufacturedTbl);
 //        Table manufacturedRes = bsTableEnv.sqlQuery("SELECT * FROM latestManufactured");
 //        bsTableEnv.toRetractStream(manufacturedRes, Row.class).print();
@@ -254,7 +253,7 @@ data_listings_mirrored_seattle_nwmls_school
         /**
          * multifamily
          */
-//        Table latestMultifamilyTbl = processListings(multifamilyTopic, multifamilyConsumerGroup, "Multifamily");
+        Table latestMultifamilyTbl = processListings(multifamilyTopic, multifamilyConsumerGroup, "Multifamily");
 //        bsTableEnv.registerTable("latestMultifamily", latestMultifamilyTbl);
 //        Table multifamilyRes = bsTableEnv.sqlQuery("SELECT * FROM latestMultifamily");
 //        bsTableEnv.toRetractStream(multifamilyRes, Row.class).print();
@@ -262,7 +261,7 @@ data_listings_mirrored_seattle_nwmls_school
         /**
          * rental
          */
-//        Table latestRentalTbl = processListings(rentalTopic, rentalConsumerGroup, "Rental");
+        Table latestRentalTbl = processListings(rentalTopic, rentalConsumerGroup, "Rental");
 //        bsTableEnv.registerTable("latestRental", latestRentalTbl);
 //        Table rentalRes = bsTableEnv.sqlQuery("SELECT * FROM latestRental");
 //        bsTableEnv.toRetractStream(rentalRes, Row.class).print();
@@ -270,8 +269,10 @@ data_listings_mirrored_seattle_nwmls_school
         /**
          * ALL LISTINGS
          */
-        Table allListingsTbl = latestCondosTbl.unionAll(latestVacantLandTbl).unionAll(latestResidentialTbl);
+        Table allListingsTbl = latestCondosTbl.unionAll(latestVacantLandTbl).unionAll(latestResidentialTbl).unionAll(latestFarmranchTbl).unionAll(latestManufacturedTbl).unionAll(latestMultifamilyTbl).unionAll(latestRentalTbl);
         bsTableEnv.registerTable("allListings", allListingsTbl);
+//        Table allRes = bsTableEnv.sqlQuery("SELECT * FROM allListings");
+//        bsTableEnv.toRetractStream(allRes, Row.class).print();
 
         /**
          * AGENTS
@@ -315,9 +316,9 @@ data_listings_mirrored_seattle_nwmls_school
                         "LEFT JOIN latestOffices od ON l.SCO = od.pkO " +
                         "LEFT JOIN latestOpenHouses oh ON l.pkL = oh.listingKeyOH"
         );
-        bsTableEnv.toRetractStream(joinedCondosTbl, Row.class).print();
-//        DataStream<Tuple2<Boolean, Row>> joinedCondosStream = bsTableEnv.toRetractStream(joinedCondosTbl, Row.class);
-//        joinedCondosStream.addSink(kafkaProducer);
+//        bsTableEnv.toRetractStream(joinedCondosTbl, Row.class).print();
+        DataStream<Tuple2<Boolean, Row>> joinedCondosStream = bsTableEnv.toRetractStream(joinedCondosTbl, Row.class);
+        joinedCondosStream.addSink(kafkaProducer);
 
         bsEnv.execute("seattle-job");
 
